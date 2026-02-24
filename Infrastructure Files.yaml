@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for RDS instance'
+
+Parameters:
+  DBName:
+    Type: String
+    Default: userdb
+    Description: Database name
+  
+  DBUsername:
+    Type: String
+    Default: admin
+    Description: Database master username
+  
+  DBPassword:
+    Type: String
+    NoEcho: true
+    Description: Database master password
+  
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.micro
+    Description: RDS instance class
+  
+  DBAllocatedStorage:
+    Type: Number
+    Default: 20
+    Description: Allocated storage in GB
+
+Resources:
+  RDSDatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for RDS instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+  
+  RDSDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBName: !Ref DBName
+      AllocatedStorage: !Ref DBAllocatedStorage
+      DBInstanceClass: !Ref DBInstanceClass
+      Engine: MySQL
+      EngineVersion: 8.0.33
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      VPCSecurityGroups:
+        - !Ref RDSDatabaseSecurityGroup
+      BackupRetentionPeriod: 1
+      MultiAZ: false
+      PubliclyAccessible: true
+      StorageType: gp2
+    DeletionPolicy: Snapshot
+
+Outputs:
+  DatabaseEndpoint:
+    Description: RDS endpoint address
+    Value: !GetAtt RDSDBInstance.Endpoint.Address
+  
+  DatabasePort:
+    Description: RDS endpoint port
+    Value: !GetAtt RDSDBInstance.Endpoint.Port
