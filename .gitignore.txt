@@ -1,0 +1,48 @@
+# Compiled files
+*.class
+target/
+*.jar
+*.war
+*.ear
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+.springBeans
+.metadata
+.sts4-cache
+
+# VS Code
+.vscode/
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Application files
+application.properties
+application-local.properties
+
+# AWS credentials
+.aws/
+*.pem
+*-credentials.txt
+secrets/
+
+# Maven wrapper
+mvnw
+mvnw.cmd
+.mvn/
+
+# Test files
+test-output/
